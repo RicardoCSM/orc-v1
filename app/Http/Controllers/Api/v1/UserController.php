@@ -29,10 +29,7 @@ class UserController extends AbstractController
             $user = $this->user->where('id', $id)->get();
 
             if($user->isEmpty()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'User not found'
-                ], 404);
+                return $this->userNotFoundedResponse();
             }
 
             return response()->json([
@@ -57,10 +54,7 @@ class UserController extends AbstractController
             $user = $this->user->where('id', $id);
 
             if($user->isEmpty()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'User not found'
-                ], 404);
+                return $this->userNotFoundedResponse();
             }
 
             if ($request->old_password && !Hash::check($request->old_password, $user->password)) {
@@ -92,7 +86,7 @@ class UserController extends AbstractController
      * Delete the specified user.
      * 
      * @param number $id
-     * @return JsonResponse
+     * @return void
      */
     public function destroy($id)
     {
@@ -100,15 +94,26 @@ class UserController extends AbstractController
             $user = $this->user->where('id', $id);
 
             if($user->isEmpty()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'User not found'
-                ], 404);
+                return $this->userNotFoundedResponse();
             }
+            
             $user->tokens()->delete();
             $user->delete();
         } catch(\Throwable $th) {
             $this->throwableResponse($th);
         }
+    }
+
+    /**
+     * Return the User not founded response.
+     *
+     * @return JsonResponse
+     */
+    private function userNotFoundedResponse(): JsonResponse
+    {
+        return response()->json([
+            'status' => false,
+            'message' => 'User not found'
+        ], 404);
     }
 }

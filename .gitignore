@@ -11,6 +11,7 @@
 .env.production
 .phpunit.result.cache
 Homestead.json
+google-ocr-key.json
 Homestead.yaml
 auth.json
 npm-debug.log

@@ -40,7 +40,7 @@ class RegisterController extends AbstractController
     {
         return response()->json([
             'status' => true,
-            'message' => 'User Created Successfully',
+            'message' => 'User Created Successfully!',
             'token' => $user->createToken("API TOKEN")->plainTextToken
         ], 200);
     }
